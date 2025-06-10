@@ -1,35 +1,27 @@
 import { createElement } from '../components.js';
 import { getCurrentUser } from '../utils/auth.js';
 import { fetchConversations, fetchUserById } from '../api/api.js';
+import { selectItem } from '../handlers/eventHandlers.js';
 
 export async function displayUserConversations() {
     const container = document.getElementById('message-container');
     if (!container) return;
 
     const currentUser = getCurrentUser();
+    console.log(currentUser);
+    
     if (!currentUser) return;
 
     try {
         const conversations = await fetchConversations();
+        console.log(conversations);
         
         // Filtrer les conversations de l'utilisateur courant
         const userConversations = conversations.filter(conv => 
-            conv.participants.includes(Number(currentUser.id))
+            conv.participants.includes(currentUser.id)
         );
 
         console.log('Conversations de l\'utilisateur:', userConversations);
-        
-
-        // const userInterlocutor = userConversations.find(conv => 
-        //     conv.participants.find(participant => participant.id !== currentUser.id)
-        // );
-
-        // console.log('User Interlocutor:', userInterlocutor);
-
-        const userInterlocutors = userConversations.filter(conv => 
-            conv.participants.length === 2 && 
-            conv.participants.some(participant => participant.id !== currentUser.id)
-        );
 
         // Trier les conversations par date de dernière mise à jour
         userConversations.sort((a, b) => 
@@ -43,17 +35,20 @@ export async function displayUserConversations() {
         for (const conv of userConversations) {
             const lastMessage = conv.messages[conv.messages.length - 1];
             const isLastMessageFromUser = lastMessage?.senderId === Number(currentUser.id);
-            const userInterlocutor = conv.participants.find(participantId => participantId !== Number(currentUser.id));
+            const userInterlocutor = conv.participants.find(participantId => participantId !== currentUser.id);
             console.log('User Interlocutor:', userInterlocutor);
             console.log('currentUser:', currentUser);
+            console.log('Conversation:', conv);
             
             const Interlocutor = userInterlocutor ? await fetchUserById(userInterlocutor) : null;
             console.log('Interlocutor:', Interlocutor.name);
+            console.log(Interlocutor);
             
 
+            if(conv.messages.length === 0) continue
             const conversationElement = createElement('div', {
                 class: ['w-full', 'flex', "flex-col", "gap-3",'items-center', 'px-4', "py-1", 'hover:bg-[#202c33]', 'cursor-pointer'],
-                onclick: () => selectConversation(conv.id)
+                onclick: () => selectItem(Interlocutor, conv.isGroup ? 'group' : 'contact', conv)
             }, [createElement ("hr", {class: ["w-[91.5%]", "mt-0", "border-t", "ml-10", "border-gray-600"]}),
                 createElement('div', {
                     class: ['flex', 'items-start', 'w-full', 'gap-3']
@@ -62,7 +57,7 @@ export async function displayUserConversations() {
                         class: ['size-8', 'rounded-full', 'overflow-hidden']
                     }, [
                         createElement('img', {
-                            src: Interlocutor.avatar || '',
+                            src: conv.isGroup ? conv.groupAvatar : Interlocutor.avatar || 'https://via.placeholder.com/150',
                             class: ['w-full', 'h-full', 'object-cover']
                         })
                     ]),
@@ -74,7 +69,7 @@ export async function displayUserConversations() {
                         }, [
                             createElement('h3', {
                                 class: ['text-white', 'font-medium']
-                            }, Interlocutor.name),
+                            }, conv.isGroup ? conv.groupName : Interlocutor.name),
                             createElement('span', {
                                 class: ['text-xs', 'text-gray-400']
                             }, formatDate(conv.lastUpdated))
@@ -84,7 +79,7 @@ export async function displayUserConversations() {
                         }, [
                             conv.isGroup ? '✓' : !Interlocutor.isOnline ? '✓' : '✓✓',
                             conv.isGroup && isLastMessageFromUser ? 'Vous: ' : '',
-                            lastMessage?.text || 'Aucun message'
+                            lastMessage?.text || 'Messahe en attente'
                         ].join(''))
                     ])
                 ]),
@@ -99,7 +94,7 @@ export async function displayUserConversations() {
     }
 }
 
-function formatDate(dateString) {
+export function formatDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -113,9 +108,4 @@ function formatDate(dateString) {
     } else {
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
     }
-}
-
-function selectConversation(conversationId) {
-    // TODO: Implémenter la sélection de conversation
-    console.log('Conversation sélectionnée:', conversationId);
 }

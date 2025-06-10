@@ -1,10 +1,11 @@
 // Base URL for the JSON Server API
-const BASE_URL = 'http://localhost:3002';
+// const BASE_URL = 'https://json-server-yaatal.onrender.com';
+const LOCAL_HOST = 'http://localhost:3002';
 
 // Generic fetch function with error handling
 const fetchAPI = async (url, options = {}) => {
   try {
-    const response = await fetch(`${BASE_URL}${url}`, {
+    const response = await fetch(`${LOCAL_HOST}${url}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -28,6 +29,9 @@ export const fetchUsers = async () => {
   return await fetchAPI('/users');
 };
 
+export const fetchContacts = async () => {
+  return await fetchAPI("/contacts");
+}
 export const getUserByPhone = async (phone) => {
   const users = await fetchUsers();
   return users.find(user => user.phone === phone);
@@ -138,14 +142,14 @@ export const deleteMessage = async (conversationId, messageId) => {
 };
 
 // Alias function for better semantics when fetching contacts
-export const fetchContacts = fetchUsers;
+// export const fetchContacts = fetchUsers;
 
 // Status-related API calls
 export const fetchStatuses = async () => {
   return await fetchAPI('/status');
 };
 
-export const createStatus = async (statusData) => {
+export const createStatus = async (statusData) => {fetchContacts
   // Set expiration to 24 hours from now
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + 24);

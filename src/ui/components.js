@@ -2,34 +2,42 @@ import { createElement } from "../components.js";
 import { FONTUP, MESSAGES_BUTTONS, RIGHT_BUTTONS } from '../consts.js';
 import { handleLogout } from "../handlers/eventHandlers.js";
 import {handleLogin} from "../pages/login.js";
+import { handleButtonClick } from "../handlers/eventHandlers.js";
 
 // import { FONT, RIGHT_BUTTONS, DEFAULT_USER, GROUPES } from "../consts.js";
 // import { handleButtonClick, handleRightButtonClick, addContact, addGroup, sendMessage } from "../handlers/eventHandlers.js";
 // import { showElement } from "./uiManager.js";
 // import { closeMembersModal, toggleAddMemberForm, addMembersToGroup } from "./uiManager.js";
 
-export const leftBox = createElement("div", {
-  class: ["w-[5%]", "h-full", "flex", "flex-col", "justify-between", "bg-[#202c33]"]
-  
-}, [createElement("div", {
-  class: ["h-[25%]", "flex", "flex-col", "gap-3", "items-center", "justify-center"],
-  vFor: {
-    each: FONTUP,
-    render: (item) => {
-        return createElement("button",{
-          class: ["w-[100%]", "h-[20%]", "flex", "flex-col"],
-          id: item.id,
-          onclick: () => {
-            handleButtonClick(item.id)
-        }
-        }, [createElement("div", {class: item.bubbleClass}, item.bubbleContent),createElement("i",  {class: item.item, title: item.title, id: item.id}), createElement("div",{class:["text-xs", "text-slate-800"]}, item.text)])
-    }
-  }}), createElement("div", {class: ["h-[15%]", "flex", "flex-col", "justify-center", "items-center", "gap-3"]}, 
-    [ 
-      createElement("button", {title: "Paramètres"},  createElement("i", {class: ["fa-solid fa-gear", "text-gray-500", "text-2xl"]})),
-      createElement("img", {class: ["w-10", "h-10", "cursor-pointer", "rounded-full"], src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80", title: "Profil"}),
-    ]
-  )]);
+export const leftBox =  createElement("div", {class: ["w-[5%]", "h-full", "flex", "flex-col", "justify-between", "bg-[#202c33]"]}, 
+                        [
+                          createElement("div", {
+                            class: ["h-[25%]", "flex", "flex-col", "gap-3", "items-center", "justify-center"],
+                            vFor: {
+                              each: FONTUP,
+                              render: (item) => {
+                                  return  createElement("button",{
+                                            class: ["w-[100%]", "h-[20%]", "flex", "flex-col"],
+                                            id: item.id,
+                                            onclick: () => {
+                                              handleButtonClick(item.id)
+                                            }
+                                          }, 
+                                          [
+                                            createElement("div", {class: item.bubbleClass}, item.bubbleContent),
+                                            createElement("i",  {class: item.item, title: item.title, id: item.id}),
+                                            createElement("div",{class:["text-xs", "text-slate-800"]}, item.text)
+                                          ])
+                              }
+                            }
+                          }), 
+                          createElement("div", {class: ["h-[15%]", "flex", "flex-col", "justify-center", "items-center", "gap-3"]}, 
+                            [ 
+                              createElement("button", {title: "Paramètres", id: "settings-button", onclick: () => { handleButtonClick("settings-button") }},  createElement("i", {class: ["fa-solid fa-gear", "text-gray-500", "text-2xl"]})),
+                              createElement("img", {class: ["w-10", "h-10", "cursor-pointer", "rounded-full"], id: "profile-picture", src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80", title: "Profil", onclick: () => { handleButtonClick("profile-picture") }}),
+                            ]
+                          )
+                        ]);
 
 export const formAddContact = createElement("div", {
     class: ["w-[80%]", "h-[60%]", "bg-[#f0efe8]", "m-20", "flex", "flex-col", "gap-4", "items-center", "rounded-2xl", "p-6"],
@@ -172,26 +180,6 @@ export const membersModal = createElement("div", {
   ])
 ]);
 
-export const listContact = createElement("div",{
-  class: ["w-full", "h-[90%]", "flex", "flex-col", "items-center", "gap-1"],
-  id: "list-contact"
-});
-
-export const listGroup = createElement("div", {
-  class: ["w-full", "h-[90%]", "flex", "flex-col", "items-center", "gap-1", "relative"],
-  id: "list-groupe"
-}, [
-  createElement("div", {
-    class: ["w-full", "flex", "flex-col", "items-center", "gap-1"],
-    id: "groups-container"
-  }),
-  createElement("button", {
-    class: ["size-16", "absolute", "border", "border-[#e1b447]", "bottom-4", "right-4", "rounded-full", "bg-white", "hover:bg-[#e1b447]"],
-    id: "add-groupe",
-    // onclick: () => showElement("form-add-group")
-  }, createElement("i", {class: ["fa-solid", "fa-plus"]}))
-]);
-
 export const listArchive = createElement("div", {
   class: ["w-full", "h-[90%]", "flex", "flex-col", "items-center", "gap-1"],
   id: "list-archive"
@@ -208,7 +196,7 @@ export const listMessage = createElement("div", {
     createElement("div", {class: ["w-full", "flex", "justify-between", "p-4"]}, 
       [
         createElement("div", { class: ["text-2xl", "text-white", "font-bold"]}, "Messages"), 
-        createElement("div", { class: ["w-[15%]", "flex", "items-center", "gap-5"]}, [createElement("i", {class: ["fa-solid", "fa-plus","text-xl", "text-gray-500"]}), createElement("i", {class: ["fa-solid", "fa-ellipsis-vertical", "text-xl", "text-gray-500"]})])
+        createElement("div", { class: ["w-[15%]", "flex", "items-center", "gap-5"], id:"new-chat"}, [createElement("i", {class: ["fa-solid", "fa-plus","text-xl", "text-gray-500", "cursor-pointer"], onclick: () => { handleButtonClick("new-chat") }}), createElement("i", {class: ["fa-solid", "fa-ellipsis-vertical", "text-xl", "text-gray-500", "cursor-pointer"]})])
       ]),
     createElement("input", {
       class: ["w-[95%]", "p-2", "rounded-lg", "bg-[#202c33]", "text-gray-500", "placeholder:text-gray-500"],
@@ -245,6 +233,7 @@ export const listMessage = createElement("div", {
 
 const profil = createElement("div", {
   class: ["w-full", "h-full", "p-5","flex", "flex-col"],
+  id: "profil-container"
 },
 [
   createElement("div", {class: ["text-2xl", "text-white", "font-bold"]}, "Profil"),
@@ -284,7 +273,8 @@ const profil = createElement("div", {
 ]);
 
 const settings = createElement("div", {
-  class: ["w-full", "h-full", "p-5", "flex", "gap-1", "flex-col", "bg-gray-900"]
+  class: ["w-full", "h-full", "p-5", "flex", "gap-1", "flex-col", "bg-gray-900"],
+  id: "settings-container"
 }, [
   // Header
   createElement("div", {class: "py-4"}, createElement("div", {
@@ -449,6 +439,188 @@ const settings = createElement("div", {
   ])
 ]);
 
+const contacts = createElement("div", {
+  class: ["w-full", "h-full", "px-5", "flex", "flex-col", "bg-gray-900"],
+  id: "contacts-container"
+}, [
+  // Header with back arrow and title
+  createElement("div", {
+    class: ["flex", "items-center", "gap-4", "py-4"]
+  }, [
+      createElement("div", {
+        class: ["text-white", "cursor-pointer"]
+      }, 
+        createElement("i", {
+          class: ["fa-solid", "fa-arrow-left", "text-xl"]
+        })
+      ),
+      createElement("div", {
+        class: ["text-2xl", "text-white", "font-bold", "flex-1"]
+      }, "New chat"),
+      createElement("div", {
+        class: ["px-3", "py-1", "border", "border-gray-600", "rounded", "text-gray-400", "text-sm"]
+      }, "New chat")
+  ]),
+
+  // Search bar
+  createElement("div", {
+    class: ["w-full", "py-1", "relative"]
+  }, [
+      createElement("i", {
+        class: ["fa-solid", "fa-arrow-left", "absolute", "left-3", "top-1/2", "transform", "-translate-y-1/2", "text-teal-400"]
+      }),
+      createElement("input", {
+        class: ["w-full", "bg-gray-800", "text-gray-300", "rounded-lg", "py-3", "pl-10", "pr-4", "placeholder-gray-500"],
+        type: "text",
+        placeholder: "Search name or number"
+      })
+  ]),
+
+  createElement("div", {
+    class: "h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-none [&::-webkit-scrollbar-thumb]:bg-gray-800 [&::-webkit-scrollbar-thumb]:rounded-full",
+  },
+    [
+      // New options section
+      createElement("div", {
+        class: ["flex", "flex-col", "gap-1"]
+      }, [
+        // New group
+        createElement("div", {
+          class: ["flex", "items-center", "gap-4", "p-3", "hover:bg-gray-800", "rounded-lg", "cursor-pointer"]
+        }, [
+          createElement("div", {
+            class: ["w-12", "h-12", "bg-teal-500", "rounded-full", "flex", "items-center", "justify-center"]
+          }, 
+            createElement("i", {
+              class: ["fa-solid", "fa-users", "text-white"]
+            })
+          ),
+          createElement("div", {
+            class: ["text-white", "font-medium"]
+          }, "New group")
+        ]),
+
+        // New contact
+        createElement("div", {
+          class: ["flex", "items-center", "gap-4", "p-3", "hover:bg-gray-800", "rounded-lg", "cursor-pointer"]
+        }, [
+          createElement("div", {
+            class: ["w-12", "h-12", "bg-teal-500", "rounded-full", "flex", "items-center", "justify-center"]
+          }, 
+            createElement("i", {
+              class: ["fa-solid", "fa-user-plus", "text-white"]
+            })
+          ),
+          createElement("div", {
+            class: ["text-white", "font-medium"]
+          }, "New contact")
+        ]),
+
+        // New community
+        createElement("div", {
+          class: ["flex", "items-center", "gap-4", "p-3", "hover:bg-gray-800", "rounded-lg", "cursor-pointer"]
+        }, [
+          createElement("div", {
+            class: ["w-12", "h-12", "bg-teal-500", "rounded-full", "flex", "items-center", "justify-center"]
+          }, 
+            createElement("i", {
+              class: ["fa-solid", "fa-users-cog", "text-white"]
+            })
+          ),
+          createElement("div", {
+            class: ["text-white", "font-medium"]
+          }, "New community")
+        ])
+      ]),
+
+      // Contacts section
+      createElement("div", {
+        class: ["flex", "flex-col", "gap-1"],
+        id: "contacts-list"
+      },)
+    ]),
+
+  
+]);
+
+const status = createElement("div", {
+  class: ["w-full", "h-full", "flex", "flex-col", "gap-3", "bg-[#0c1317]"],
+  id: "status-zone"
+}, [
+  createElement("div", {class: ["w-full", "h-[15%]", "flex", "flex-col", "p-2", "bg-[#111b21]", "gap-4"]}, 
+    [
+      // Header with title and action buttons
+  createElement("div", {
+    class: ["flex", "items-center", "justify-between"]
+  }, [
+    createElement("div", {
+      class: ["text-2xl", "text-white", "font-bold"]
+    }, "Status"),
+    createElement("div", {
+      class: ["flex", "items-center", "gap-4"]
+    }, [
+      createElement("div", {
+        class: ["text-white", "cursor-pointer", "hover:bg-gray-800", "p-2", "rounded"]
+      }, 
+        createElement("i", {
+          class: ["fa-solid", "fa-plus", "text-xl"]
+        })
+      ),
+      createElement("div", {
+        class: ["text-white", "cursor-pointer", "hover:bg-gray-800", "p-2", "rounded"]
+      }, 
+        createElement("i", {
+          class: ["fa-solid", "fa-ellipsis-vertical", "text-xl"]
+        })
+      )
+    ])
+  ]),
+
+  // My status section
+  createElement("div", {
+    class: [ "flex", "items-center", "gap-4", "hover:bg-gray-800", "rounded-lg", "cursor-pointer",]
+  }, [
+    createElement("div", {
+      class: ["relative"]
+    }, [
+      createElement("img", {
+        class: ["w-14", "h-14", "rounded-full", "object-cover"],
+        src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+        alt: "My status"
+      }),
+      createElement("div", {
+        class: ["absolute", "bottom-0", "right-0", "w-5", "h-5", "bg-teal-500", "rounded-full", "flex", "items-center", "justify-center", "border-2", "border-gray-900"]
+      }, 
+        createElement("i", {
+          class: ["fa-solid", "fa-plus", "text-white", "text-xs"]
+        })
+      )
+    ]),
+    createElement("div", {
+      class: ["flex", "flex-col"]
+    }, [
+      createElement("div", {
+        class: ["text-white", "font-medium"]
+      }, "My status"),
+      createElement("div", {
+        class: ["text-gray-400", "text-sm"]
+      }, "Click to add status update")
+    ])
+  ]),
+    ]),
+  
+
+  // Recent section
+  createElement("div", {
+    class: ["flex", "flex-col", "gap-1", "bg-[#111b21]", "overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-none [&::-webkit-scrollbar-thumb]:bg-gray-800 [&::-webkit-scrollbar-thumb]:rounded-full"],
+    id: "status-container"
+  }, [
+    // Section title
+    
+
+  ])
+]);
+
 export const centerBox = createElement("div", {
   class: ["w-[27%]", "h-full", "bg-[#111b21]", "flex", "flex-col", "items-center"]
 }, [
@@ -457,10 +629,12 @@ export const centerBox = createElement("div", {
     // listContact,
     // listGroup,
     // listArchive,
-    // listMessage,
     // membersModal,
-    // profil,
-    settings
+    profil,
+    listMessage,
+    settings,
+    contacts,
+    status
 ]);
 
 export const rightBox =createElement("div", {class: ["w-[68%]"]}, 
@@ -470,10 +644,10 @@ export const rightBox =createElement("div", {class: ["w-[68%]"]},
   class: ["w-full", "h-full", "bg-[#efe7d7]", "flex", "flex-col"]
 }, [ 
   createElement("div", {
-    class: ["w-ful", "h-[7%]", "bg-[#202c33]", "flex", "justify-between", "items-center", "px-5"]
+    class: ["w-full", "h-[7%]", "bg-[#202c33]", "flex", "justify-between", "items-center", "px-5"]
   }, [createElement("div", {class: ["flex", "items-center", "space-x-2"]}, 
       [
-        createElement("div", {
+        createElement("img", {
         class: ["w-12", "h-12", "bg-gray-400", "rounded-full", "flex", "items-center", "justify-center"],
         id: "selected-avatar"
       }),

@@ -1,0 +1,1 @@
+import { FONTUP } from "../consts";

@@ -1,6 +1,7 @@
 import { apiService } from '../services/api.js';
 import { getCurrentUser, setCurrentUser } from '../utils/auth.js';
 import { displayUserConversations } from './chats.js';
+import {showElement} from '../handlers/eventHandlers.js';
 
 // Fonction de gestion de la connexion
 export const handleLogin = async (event) => {
@@ -23,6 +24,8 @@ export const handleLogin = async (event) => {
   try {
     // Vérifier si l'utilisateur existe déjà
     const user = await apiService.getUserByPhone(phone);
+    console.log(user);
+    
     
     if (user) {
       // Utilisateur existant - mettre à jour le statut en ligne
@@ -41,9 +44,10 @@ export const handleLogin = async (event) => {
       setTimeout(async () => {
         hideLoginPage();
         showMainApp();
+
         // Afficher les conversations de l'utilisateur
-        await displayUserConversations();
-      }, 1500);
+        showElement('list-message');
+      }, 100);
     } else {
       showError('No account found with this phone number');
     }
@@ -156,7 +160,7 @@ export function logout() {
 // Ajouter cette fonction pour supprimer la session
 export function clearUserSession() {
   try {
-    localStorage.removeItem("userSession");
+    localStorage.removeItem("currentUser");
     console.log("Session utilisateur supprimée");
   } catch (error) {
     console.error("Erreur lors de la suppression de la session:", error);

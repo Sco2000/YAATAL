@@ -40,11 +40,11 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 // console.log(getCurrentUser());
-displayUserConversations();
-renderGroupedContacts()
-getContactStatus()
-separateStatus();
-hideAllElements(); 
+// displayUserConversations();
+// renderGroupedContacts()
+// getContactStatus()
+// separateStatus();
+// hideAllElements(); 
 
 // console.log(JSON.parse(localStorage.getItem('currentUser')));
 

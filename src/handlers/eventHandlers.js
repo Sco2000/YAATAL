@@ -1,6 +1,9 @@
 import { logout } from "../pages/login";
 import { formatDate } from "../pages/chats";
-import { fetchUserById } from "../api/api";
+import { fetchUserById, sendMessage, fetchConversationById } from "../api/api";
+import { loadConversations } from "../pages/chatBox";
+import { getCurrentUser } from "../utils/auth";
+import { displayUserConversations } from "../pages/chats";
 
 const managedElements = ["list-message", "contacts-container", "status-zone", "settings-container", "profil-container"];
 
@@ -8,6 +11,8 @@ const managedButtons = ["message", "status", "settings-button", "profile-picture
 
 let selectedItem = null;
 let selectedType = null;
+export let selectedConversation = null;
+let updatedConversation = null;
 
 export function hideAllElements() {
   managedElements.forEach(id => {
@@ -109,19 +114,21 @@ export function handleLogout() {
     // Réinitialiser les champs de connexion
     // resetLoginForm();
     
-    console.log("Déconnexion réussie");
+    // console.log("Déconnexion réussie");
 }
 
-export async function selectItem(item, type, conversation = "") {
+export async function selectItem(item, type, conversation) {
   selectedItem = item;
   selectedType = type;
+  selectedConversation = conversation;
   
+  handleSendMessage();
   const inputElement = document.querySelector("input[placeholder=Rechercher]");
   const nameElement = document.getElementById("selected-name");
   const avatarElement = document.getElementById("selected-avatar");
   const statusElement = document.getElementById("selected-status");
   inputElement.value = "";
-  console.log(formatDate(item.lastSeen));
+  // console.log(formatDate(item.lastSeen));
   
   if (type === 'contact') {
     statusElement.textContent = item.isOnline ? "En ligne" : `Dernière vue : ${formatDate(item.lastSeen)}`;
@@ -129,24 +136,27 @@ export async function selectItem(item, type, conversation = "") {
     avatarElement.setAttribute("src", item.avatar || ""); 
   } else {
     const members = await getGroupParticipants(conversation)
-    console.log(members);
+    // console.log(members);
     const membersSorted = members.sort((a, b) => a.name.localeCompare(b.name));
-    console.log(membersSorted);
+    // console.log(membersSorted);
     
     nameElement.textContent = conversation.groupName;
-    avatarElement.setAttribute("src", conversation.groupAvatar || ""); 
+    avatarElement.setAttribute("src", conversation.groupAvatar || "");
     const memberCount = Object.keys(item.users || {}).length;
     const membersName = membersSorted.map(member => member.name).join(", ");
     statusElement.textContent = membersName;
   }
+  console.log(conversation);
   
+  loadConversations(conversation); // Charger les conversations pour afficher les messages
+
   // const messageInput = document.getElementById("message-input");
   // const sendButton = document.getElementById("send-button");
   // messageInput.disabled = false;
   // sendButton.disabled = false;
   
-  const conversationId = generateConversationId(item, type);
-  displayMessages(conversationId, item);
+  // const conversationId = generateConversationId(item, type);
+  // displayMessages(conversationId, item);
 }
 
 async function getGroupParticipants(conversation) {
@@ -157,7 +167,52 @@ async function getGroupParticipants(conversation) {
             members.push(user);
         }
     }
-    console.log(members);
+    // console.log(members);
     
     return members;
+} 
+
+export async function handleSendMessage() {
+  const messageInput = document.getElementById("message-input");
+  const button = document.getElementById("send-button");
+  const currentUser = getCurrentUser();
+  if (!messageInput || !currentUser || !button || !selectedConversation) {
+    // console.log('Message impossible: données manquantes', {
+    //   hasInput: !!messageInput,
+    //   hasUser: !!currentUser,
+    //   hasConversation: !!selectedConversation
+    // });
+    return;
+  }
+  
+  const messageText = messageInput.value.trim();
+  if (!messageText) return;
+  
+  try {
+    // Préparer les données du message
+    const messageData = {
+      senderId: currentUser.id,
+      content: messageText,
+      type: 'text',
+      timestamp: new Date().toISOString(),
+    };
+    
+    // Envoyer le message
+    await sendMessage(selectedConversation.id, messageData);
+    
+    // Vider l'input
+    messageInput.value = '';
+    
+    // Récupérer la conversation mise à jour
+    updatedConversation = await fetchConversationById(selectedConversation.id);
+    
+    // Mettre à jour la conversation sélectionnée
+    selectedConversation = updatedConversation;
+    
+    // Recharger la conversation avec les données mises à jour
+    loadConversations(updatedConversation);
+    displayUserConversations();
+  } catch (error) {
+    // console.error('Erreur lors de l\'envoi du message:', error);
+  }
 }

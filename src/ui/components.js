@@ -2,7 +2,7 @@ import { createElement } from "../components.js";
 import { FONTUP, MESSAGES_BUTTONS, RIGHT_BUTTONS } from '../consts.js';
 import { handleLogout } from "../handlers/eventHandlers.js";
 import {handleLogin} from "../pages/login.js";
-import { handleButtonClick } from "../handlers/eventHandlers.js";
+import { handleButtonClick, handleSendMessage } from "../handlers/eventHandlers.js";
 
 // import { FONT, RIGHT_BUTTONS, DEFAULT_USER, GROUPES } from "../consts.js";
 // import { handleButtonClick, handleRightButtonClick, addContact, addGroup, sendMessage } from "../handlers/eventHandlers.js";
@@ -211,7 +211,7 @@ export const listMessage = createElement("div", {
           return createElement("button", {
             class: button.class,
             onclick: () => {
-              console.log(button.titre);
+              // console.log(button.titre);
             }
           }, button.titre);
         }
@@ -223,7 +223,7 @@ export const listMessage = createElement("div", {
         createElement("div", {id: "counter-archive", class: ["text-[#00a884]", "flex", "items-center", "text-xs", "font-semibold"]}, "0"),
         
       ]),
-    createElement("hr", {class: ["w-[85%]", "border-t", "ml-10", "border-gray-600"]}),
+    createElement("hr", {class: ["w-[85%]", "border-t", "ml-10", "border-gray-800"]}),
   ]),
   createElement("div", {
     class: ["w-full", "flex", "flex-col", "items-center", "gap-1"],
@@ -672,17 +672,18 @@ export const rightBox =createElement("div", {class: ["w-[68%]"]},
   ]),
   
   createElement("div", {
-    class: ["h-full", "p-4", "overflow-y-auto", "bg-[url('../public/HD-wallpaper-whatsapp-dark-mode-whatsapp.jpg')]"],
+    class: ["h-full", "w-full", "flex", "flex-col", "gap-2", "p-4", "overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-none [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar]:opacity-25", "bg-[url('../public/HD-wallpaper-whatsapp-dark-mode-whatsapp.jpg')]"],
     id: "messages-area"
-  }),
-  createElement("div", {class: ["w-full", "h-[7%]", "bg-[#202c33]", "flex", "items-center", "justify-between", "p-4"], id: "message-input-container"},
+  }, ),
+  createElement("div", {class: ["w-full", "h-[7%]", "bg-[#202c33]", "flex", "items-center", "justify-center", "gap-5", "p-4"], id: "message-input-container"},
     [
-      createElement("button", {}, createElement("i", {class: ["fa-solid", "fa-plus", "text-xl", "text-gray-500"]})),
+      createElement("button", {}, createElement("i", {class: ["fa-solid", "fa-plus", "text-2xl", "text-gray-300"]})),
       createElement("input", {
-        class: ["w-[95%]", "p-2", "bg-[#2a3942]","rounded-lg", "", "text-gray-500", "placeholder:text-gray-500"],
+        class: ["w-[92%]", "p-2", "bg-[#2a3942]","rounded-lg", "outline-none", "text-gray-300", "placeholder:text-gray-400"],
+        id: "message-input",
         placeHolder: "Tapez un message"
       }),
-      createElement("button", {}, createElement("i", {class: ["fa-solid", "fa-microphone", "text-xl", "text-gray-500"]})),
+      createElement("button", {id: "send-button", onclick: handleSendMessage}, createElement("i", {class: ["fa-solid", "fa-microphone", "text-xl", "text-gray-400"]})),
     ]
   )
 ])])

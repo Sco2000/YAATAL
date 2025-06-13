@@ -11,9 +11,9 @@ export async function groupContactsByLetter() {
 
         const currentUserContacts = contacts.filter(contact => currentUserContactsId.includes(contact.id));
         // Trier les contacts par nom
-        console.log(currentUserContacts);
+        // console.log(currentUserContacts);
         
-        console.log(contacts);
+        // console.log(contacts);
         
       const sorted = [...currentUserContacts].sort((a, b) =>
         a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })
@@ -28,7 +28,7 @@ export async function groupContactsByLetter() {
         }
         grouped[letter].push(contact);
       });
-      console.log(grouped);
+      // console.log(grouped);
       
       return grouped;
     }
@@ -42,9 +42,9 @@ export async function renderGroupedContacts() {
   container.innerHTML = ''; // Vider le conteneur
   const groupedContacts = await groupContactsByLetter();
   const users = await fetchUsers();
-  console.log(users);
+  // console.log(users);
   
-  console.log(groupedContacts);
+  // console.log(groupedContacts);
   
   for (const letter in groupedContacts) {
     // Titre de section (ex: "A")
@@ -55,7 +55,7 @@ export async function renderGroupedContacts() {
     // Contacts sous cette lettre
     groupedContacts[letter].forEach(contact => {
     const userContact = users.find(user => user.id === contact.id);
-    console.log(userContact);
+    // console.log(userContact);
       
       const contactElement = createElement("div", {
         
@@ -80,5 +80,5 @@ export async function renderGroupedContacts() {
       container.appendChild(contactElement);
     });
   }
-  console.log(container);
+  // console.log(container);
 }

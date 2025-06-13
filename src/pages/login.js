@@ -24,7 +24,7 @@ export const handleLogin = async (event) => {
   try {
     // Vérifier si l'utilisateur existe déjà
     const user = await apiService.getUserByPhone(phone);
-    console.log(user);
+    // console.log(user);
     
     
     if (user) {
@@ -46,7 +46,7 @@ export const handleLogin = async (event) => {
         showMainApp();
 
         // Afficher les conversations de l'utilisateur
-        showElement('list-message');
+        // showElement('list-message');
       }, 100);
     } else {
       showError('No account found with this phone number');
@@ -152,7 +152,7 @@ export function logout() {
   // Supprimer la session de localStorage
   clearUserSession();
   
-  console.log(`Utilisateur ${previousUser.name} déconnecté`);
+  // console.log(`Utilisateur ${previousUser.name} déconnecté`);
   
   return true;
 }
@@ -161,8 +161,8 @@ export function logout() {
 export function clearUserSession() {
   try {
     localStorage.removeItem("currentUser");
-    console.log("Session utilisateur supprimée");
+    // console.log("Session utilisateur supprimée");
   } catch (error) {
-    console.error("Erreur lors de la suppression de la session:", error);
+    // console.error("Erreur lors de la suppression de la session:", error);
   }
 }

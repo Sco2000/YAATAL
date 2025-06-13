@@ -70,7 +70,7 @@ export async function separateStatus() {
         }, createElement("div", {class: ["p-6"]}, key)))
         for (const stats in statusSorted[key]) {
             const user = await fetchUserById(stats);
-            console.log(statusSorted[key]);
+            // console.log(statusSorted[key]);
             let lastStatus = null;
             if (statusSorted[key][stats].length > 0) {
                 lastStatus = statusSorted[key][stats].reduce((latest, current) => {
@@ -79,12 +79,12 @@ export async function separateStatus() {
                 })
             }
             const latestStatusTime = lastStatus ? new Date(lastStatus.timestamp).getTime() : null;
-            console.log(
-                (lastStatus.timestamp));
+            // console.log(
+            //     (lastStatus.timestamp));
             
 
-            console.log(latestStatusTime);
-            console.log(user["avatar"]);
+            // console.log(latestStatusTime);
+            // console.log(user["avatar"]);
             
             const contain = createElement("div", {},
                             [

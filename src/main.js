@@ -9,6 +9,8 @@ import { displayUserConversations } from './pages/chats.js'
 import { getContactStatus, separateStatus } from './pages/status.js'
 import { hideAllElements } from './handlers/eventHandlers.js';
 import { showElement } from './handlers/eventHandlers.js';
+import { handleSendMessage } from './handlers/eventHandlers.js'
+import { startPolling } from './polling.js'
 
 const app = createElement(
     "div", 
@@ -37,12 +39,17 @@ window.addEventListener('DOMContentLoaded', () => {
     showLoginPage();
   }
 });
-console.log(getCurrentUser());
+// console.log(getCurrentUser());
 displayUserConversations();
 renderGroupedContacts()
 getContactStatus()
 separateStatus();
 hideAllElements(); 
 
-console.log(JSON.parse(localStorage.getItem('currentUser')));
+// console.log(JSON.parse(localStorage.getItem('currentUser')));
 
+// console.log(new Date("2025-05-09T08:33:49.213Z"));
+// console.log(new Date("2025-06-09T08:33:49.213Z"));
+
+startPolling();
+// handleSendMessage();

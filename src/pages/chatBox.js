@@ -33,8 +33,10 @@ export async function loadConversations(conversation) {
     for (const date in sortMessageByDate) {
         // console.log('Date:', date);
         // console.log(sortMessageByDate[date][0].timestamp);
+        console.log(date);
+        // console.log(new Date (date).toISOString());
         
-        const dayInIso = new Date (date).toISOString();
+        // const dayInIso = new Date (date).toISOString();
 
         const day = createElement("div", {class: ["w-full", "flex", "justify-center", "text-gray-100", 'font-semibold']}, createElement("p", {class: [ "bg-[#182229]", "rounded-xl", "w-fit", "p-2"]}, formatDate(sortMessageByDate[date][0].timestamp)));
         // console.log('Day:', day);

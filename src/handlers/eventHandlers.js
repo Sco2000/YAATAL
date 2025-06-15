@@ -4,10 +4,12 @@ import { fetchUserById, sendMessage, fetchConversationById } from "../api/api";
 import { loadConversations } from "../pages/chatBox";
 import { getCurrentUser } from "../utils/auth";
 import { displayUserConversations } from "../pages/chats";
+import { separateStatus } from "../pages/status";
+import { renderGroupedContacts } from "../pages/contacts";
 
-const managedElements = ["list-message", "contacts-container", "status-zone", "settings-container", "profil-container"];
+const managedElements = ["list-message", "contacts-container", "status-zone", "settings-container", "profil-container", "new-contact-zone"];
 
-const managedButtons = ["message", "status", "settings-button", "profile-picture", "new-chat", "deconnexion"];
+const managedButtons = ["message", "status", "settings-button", "profile-picture", "new-chat", "deconnexion", "new-contact-button"];
 
 let selectedItem = null;
 let selectedType = null;
@@ -61,6 +63,7 @@ export function handleButtonClick(buttonId) {
       // setClass("diffusions", "bg-[#e1b447]");
       // removeClass("diffusions", "hover:bg-orange-200");
       showElement("status-zone");
+      separateStatus();
       // renderContact();
       break;
     case "settings-button":
@@ -79,10 +82,14 @@ export function handleButtonClick(buttonId) {
       // setClass("message", "bg-[#e1b447]");
       // removeClass("message", "hover:bg-orange-200");
       showElement("contacts-container");
-      renderMessage();
+      renderGroupedContacts();  
+      // renderMessage();
+      break;
+    case "new-contact-button":
+      showElement("new-contact-zone");
       break;
     // case "deconnexion":
-    //   // handleLogout();
+      // handleLogout();
     //   break;
     default:
       break;

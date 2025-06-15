@@ -1,14 +1,17 @@
 // Base URL for the JSON Server API
-const BASE_URL = 'https://json-server-yaatal.onrender.com';
-// const LOCAL_HOST = 'http://localhost:3002';
+
+import { getCurrentUser } from "../utils/auth";
+
+// const BASE_URL = "https://json-server-yaatal.onrender.com";
+const LOCAL_HOST = "http://localhost:3002";
 
 // Generic fetch function with error handling
 const fetchAPI = async (url, options = {}) => {
   try {
-    const response = await fetch(`${BASE_URL}${url}`, {
+    const response = await fetch(`${LOCAL_HOST}${url}`, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers,
       },
     });
@@ -19,14 +22,14 @@ const fetchAPI = async (url, options = {}) => {
     
     return await response.json();
   } catch (error) {
-    console.error('API Request Failed:', error);
+    console.error("API Request Failed:", error);
     throw error;
   }
 };
 
 // User-related API calls
 export const fetchUsers = async () => {
-  return await fetchAPI('/users');
+  return await fetchAPI("/users");
 };
 
 export const fetchContacts = async () => {
@@ -42,28 +45,57 @@ export const fetchUserById = async (userId) => {
 };
 
 export const createUser = async (userData) => {
-  return await fetchAPI('/users', {
-    method: 'POST',
+  return await fetchAPI("/users ", {
+    method: "POST",
     body: JSON.stringify(userData),
   });
 };
 
+export const addContactToCurrentUser = async (contactData) => {
+  const currentUser = getCurrentUser();
+  const currentUserData = await fetchUserById(currentUser.id);
+  const  currentUserContacts = [...currentUserData.contacts, contactData.id];
+  return await fetchAPI(`/users/${currentUser.id}`, {
+    method: "PATCH",
+    body: JSON.stringify({contacts: currentUserContacts}),
+  });
+};
+
+// export const createContact = async (userData) => {
+//   await fetchAPI("/contacts", {
+//     method: "POST",
+//     body: JSON.stringify(userData)
+//   });
+
+//   updateUserContact(userData.id);
+// }
+
+// export const updateUserContact = async (userId) => {
+//   const currentUser = getCurrentUser();
+//   const user = await fetchUserById(currentUser.id);
+//   if (!user.contacts) {
+//     user.contacts = [];
+//   }
+//   user.contacts.push(userId.toString());
+//   return user.contacts;
+// };
+
 export const updateUser = async (userId, userData) => {
   return await fetchAPI(`/users/${userId}`, {
-    method: 'PATCH',
+    method: "PATCH",
     body: JSON.stringify(userData),
   });
 };
 
 export const deleteUser = async (userId) => {
   return await fetchAPI(`/users/${userId}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
 };
 
 // Conversation-related API calls
 export const fetchConversations = async () => {
-  return await fetchAPI('/conversations');
+  return await fetchAPI("/conversations");
 };
 
 export const fetchConversationById = async (conversationId) => {
@@ -71,8 +103,8 @@ export const fetchConversationById = async (conversationId) => {
 };
 
 export const createConversation = async (conversationData) => {
-  return await fetchAPI('/conversations', {
-    method: 'POST',
+  return await fetchAPI("/conversations", {
+    method: "POST",
     body: JSON.stringify({
       ...conversationData,
       messages: conversationData.messages || [],
@@ -83,7 +115,7 @@ export const createConversation = async (conversationData) => {
 
 export const updateConversation = async (conversationId, conversationData) => {
   return await fetchAPI(`/conversations/${conversationId}`, {
-    method: 'PATCH',
+    method: "PATCH",
     body: JSON.stringify({
       ...conversationData,
       lastUpdated: new Date().toISOString(),
@@ -93,7 +125,7 @@ export const updateConversation = async (conversationId, conversationData) => {
 
 export const deleteConversation = async (conversationId) => {
   return await fetchAPI(`/conversations/${conversationId}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
 };
 
@@ -103,8 +135,8 @@ export const sendMessage = async (conversationId, messageData) => {
   
   const newMessage = {
     id: conversation.messages.length > 0 
-      ? Math.max(...conversation.messages.map(m => m.id)) + 1 
-      : 1,
+      ? (Math.max(...conversation.messages.map(m => m.id)) + 1 ).toString()
+      : "1",
     ...messageData,
     timestamp: new Date().toISOString(),
     isRead: false,
@@ -146,7 +178,7 @@ export const deleteMessage = async (conversationId, messageId) => {
 
 // Status-related API calls
 export const fetchStatuses = async () => {
-  return await fetchAPI('/status');
+  return await fetchAPI("/status");
 };
 
 export const createStatus = async (statusData) => {fetchContacts
@@ -154,8 +186,8 @@ export const createStatus = async (statusData) => {fetchContacts
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + 24);
   
-  return await fetchAPI('/status', {
-    method: 'POST',
+  return await fetchAPI("/status", {
+    method: "POST",
     body: JSON.stringify({
       ...statusData,
       timestamp: new Date().toISOString(),
@@ -172,7 +204,7 @@ export const markStatusAsViewed = async (statusId, userId) => {
     const updatedViewedBy = [...status.viewedBy, userId];
     
     await fetchAPI(`/status/${statusId}`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({
         viewedBy: updatedViewedBy,
       }),

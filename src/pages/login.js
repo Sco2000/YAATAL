@@ -44,7 +44,7 @@ export const handleLogin = async (event) => {
       setTimeout(async () => {
         hideLoginPage();
         showMainApp();
-        showElement("list-message")
+        showElement("list-message");
         // Afficher les conversations de l'utilisateur
         // showElement('list-message');
       }, 100);

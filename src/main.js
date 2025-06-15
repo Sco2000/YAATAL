@@ -35,6 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
     hideLoginPage();
     showMainApp();
     showElement("list-message");
+    displayUserConversations();
   } else {
     showLoginPage();
   }
@@ -53,3 +54,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 startPolling();
 // handleSendMessage();
+
+// const user = getCurrentUser();
+// console.log( Number(user.id )+ 1);

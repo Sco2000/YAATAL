@@ -3,6 +3,7 @@ import { FONTUP, MESSAGES_BUTTONS, RIGHT_BUTTONS } from '../consts.js';
 import { handleLogout } from "../handlers/eventHandlers.js";
 import {handleLogin} from "../pages/login.js";
 import { handleButtonClick, handleSendMessage } from "../handlers/eventHandlers.js";
+import { addContact } from "../pages/addContact.js";
 
 // import { FONT, RIGHT_BUTTONS, DEFAULT_USER, GROUPES } from "../consts.js";
 // import { handleButtonClick, handleRightButtonClick, addContact, addGroup, sendMessage } from "../handlers/eventHandlers.js";
@@ -512,7 +513,9 @@ const contacts = createElement("div", {
             })
           ),
           createElement("div", {
-            class: ["text-white", "font-medium"]
+            class: ["text-white", "font-medium"],
+            id: "new-contact-button",
+            onclick: () => {handleButtonClick("new-contact-button")}
           }, "New contact")
         ]),
 
@@ -621,6 +624,95 @@ const status = createElement("div", {
   ])
 ]);
 
+const newContact = createElement("div", {
+  class: ["w-full", "h-full", "p-5", "gap-10", "flex", "flex-col", "bg-gray-900"],
+  id: "new-contact-zone"
+}, [
+  // Header with back arrow and title
+  createElement("div", {
+    class: ["flex", "items-center", "gap-4"]
+  }, [
+    createElement("div", {
+      class: ["text-white", "cursor-pointer"]
+    }, 
+      createElement("i", {
+        class: ["fa-solid", "fa-arrow-left", "text-xl"]
+      })
+    ),
+    createElement("div", {
+      class: ["text-2xl", "text-white", "font-bold"]
+    }, "New contact")
+  ]),
+
+  // Form fields
+  createElement("form", {
+    class: ["flex", "flex-col", "gap-8"],
+    id: "new-contact-form",
+    onsubmit: addContact
+
+  }, [
+    createElement("div", {
+      class: ["flex", "flex-col", "gap-2"]
+    }, [
+      createElement("div", {
+        class: ["flex", "items-center", "gap-3"]
+      }, [
+        createElement("i", {
+          class: ["fa-solid", "fa-user", "text-gray-400", "text-lg"]
+        }),
+        createElement("input", {
+          class: ["flex-1", "bg-transparent", "text-white", "text-lg", "border-none", "outline-none", "placeholder-gray-500"],
+          type: "text",
+          name: "name",
+          placeholder: "Full name"
+        })
+      ]),
+      createElement("div", {
+        class: ["w-full", "h-px", "bg-gray-600", "ml-8"]
+      })
+    ]),
+
+    createElement("div", {
+      class: ["flex", "flex-col", "gap-2",]
+    }, [
+      createElement("div", {
+        class: ["flex", "items-center", "gap-3"]
+      }, [
+        createElement("i", {
+          class: ["fa-solid", "fa-phone", "text-gray-400", "text-lg"]
+        }),
+        createElement("input", {
+          class: ["flex-1", "bg-transparent", "text-white", "text-lg", "border-none", "outline-none", "placeholder-gray-500"],
+          type: "tel",
+          name: "phone",
+          placeholder: "Phone number"
+        })
+      ]),
+      createElement("div", {
+        class: ["w-full", "h-px", "bg-gray-600", "ml-8"]
+      }),
+
+      createElement('div', {
+               id: 'add-error-message',
+               class: 'hidden mt-4 text-red-500 text-center'
+           }),
+           createElement('div', {
+               id: 'add-success-message',
+               class: 'hidden mt-4 text-green-500 text-center'
+           })
+    ]),
+
+    createElement("button", {
+      class: ["flex", "justify-center", "items-center"],
+      type: "submit"
+    }, 
+      [
+        createElement("i", {class: ["fa-solid","fa-plus", "size-16", "flex", "justify-center", "items-center", "bg-[#00a884]", "text-2xl", "rounded-full"]}),
+      ])
+  ]),
+
+]);
+
 export const centerBox = createElement("div", {
   class: ["w-[27%]", "h-full", "bg-[#111b21]", "flex", "flex-col", "items-center"]
 }, [
@@ -634,7 +726,8 @@ export const centerBox = createElement("div", {
     listMessage,
     settings,
     contacts,
-    status
+    status,
+    newContact,
 ]);
 
 export const rightBox =createElement("div", {class: ["w-[68%]"]}, 

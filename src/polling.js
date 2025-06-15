@@ -18,5 +18,5 @@ export function startPolling() {
         const conv = await fetchConversationById(selectedConversation.id);
         loadConversations(conv);
       }
-      }, 5000); // 5 secondes
+      }, 5000);
 }

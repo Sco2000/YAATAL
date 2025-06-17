@@ -1,9 +1,10 @@
 import { createElement } from "../components.js";
 import { FONTUP, MESSAGES_BUTTONS, RIGHT_BUTTONS } from '../consts.js';
-import { handleLogout } from "../handlers/eventHandlers.js";
+import { handleLogout } from "../handlers/logout.js";
 import {handleLogin} from "../pages/login.js";
 import { handleButtonClick, handleSendMessage } from "../handlers/eventHandlers.js";
 import { addContact } from "../pages/addContact.js";
+// import { closeStatus } from "../pages/showStatus.js";
 
 // import { FONT, RIGHT_BUTTONS, DEFAULT_USER, GROUPES } from "../consts.js";
 // import { handleButtonClick, handleRightButtonClick, addContact, addGroup, sendMessage } from "../handlers/eventHandlers.js";
@@ -857,3 +858,121 @@ export const loginPage = createElement('div', {
    ])
 ]);
 
+export const theStatus = createElement("div", { 
+    class: ["fixed", "inset-0", "bg-gray-800", "text-white", "hidden"],
+    id: "status-view"
+}, [
+    // Header avec navigation
+    // createElement("div", {
+    //     class: ["flex", "items-center", "justify-between", "p-4", "bg-gray-900"]
+    // }, [
+    //     createElement("div", {
+    //         class: ["flex", "items-center", "gap-4"]
+    //     }, [
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-arrow-left", "text-white", "text-xl", "cursor-pointer"]
+    //         }),
+    //         createElement("div", {
+    //             class: ["flex", "items-center", "gap-3"]
+    //         }, [
+    //             createElement("img", {
+    //                 class: ["w-10", "h-10", "rounded-full", "object-cover"],
+    //                 src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    //                 alt: "Libasse"
+    //             }),
+    //             createElement("div", {}, [
+    //                 createElement("div", {
+    //                     class: ["text-white", "font-medium"]
+    //                 }, "Libasse"),
+    //                 createElement("div", {
+    //                     class: ["text-gray-400", "text-sm"]
+    //                 }, "Yesterday at 13:31")
+    //             ])
+    //         ])
+    //     ]),
+    //     createElement("div", {
+    //         class: ["flex", "items-center", "gap-4"]
+    //     }, [
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-pause", "text-white", "text-xl", "cursor-pointer"]
+    //         }),
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-volume-xmark", "text-white", "text-xl", "cursor-pointer"]
+    //         }),
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-ellipsis-vertical", "text-white", "text-xl", "cursor-pointer"]
+    //         }),
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-times", "text-white", "text-xl", "cursor-pointer"]
+    //         })
+    //     ])
+    // ]),
+
+    // // Barre de progression du statut
+    // createElement("div", {
+    //     class: ["w-full", "h-1", "bg-gray-700", "relative"]
+    // }, [
+    //     createElement("div", {
+    //         class: ["h-full", "bg-white", "w-1/3"]
+    //     })
+    // ]),
+
+    // // Contenu principal du statut
+    // createElement("div", {
+    //     class: ["h-[84%]", "flex", "flex-col", "justify-center", "items-center", "p-4", "text-center"],
+    //     id: "status-content"
+    // }, [
+    //     createElement("div", {
+    //         class: ["h-full", "w-1/3","space-y-6", "border", "flex", "justify-center", "items-center"]
+    //     }, [
+    //         createElement("p", {
+    //             class: ["text-white", "text-lg", "leading-relaxed"]
+    //         }, "Couuh Sam ShaY Yi nOleine deff yolre star Préférée LibasSe LaYe sexy bOy beug lourd l'influenceur le plus suivie sur watsapp l'ami des jeuness filles et des gentille dame Peul bou rafett le miel mentholé de Madame Libasse vient de se reveiller."),
+    //     ])
+    // ]),
+
+    // // Navigation arrows
+    // createElement("div", {
+    //     class: ["absolute", "left-4", "top-1/2", "transform", "-translate-y-1/2"]
+    // }, [
+    //     createElement("i", {
+    //         class: ["fa-solid", "fa-chevron-left", "text-white", "text-2xl", "cursor-pointer", "opacity-50", "hover:opacity-100"]
+    //     })
+    // ]),
+
+    // createElement("div", {
+    //     class: ["absolute", "right-4", "top-1/2", "transform", "-translate-y-1/2"]
+    // }, [
+    //     createElement("i", {
+    //         class: ["fa-solid", "fa-chevron-right", "text-white", "text-2xl", "cursor-pointer", "opacity-50", "hover:opacity-100"]
+    //     })
+    // ]),
+
+    // // Barre de saisie en bas
+    // createElement("div", {
+    //     class: ["absolute", "bottom-0", "left-0", "right-0", "p-4", "bg-gray-900"]
+    // }, [
+    //     createElement("div", {
+    //         class: ["flex", "items-center", "gap-3"]
+    //     }, [
+    //         // createElement("i", {
+    //         //     class: ["fa-regular", "fa-face-smile", "text-white", "text-xl", "cursor-pointer"]
+    //         // }),
+    //         // createElement("i", {
+    //         //     class: ["fa-regular", "fa-comment", "text-white", "text-xl", "cursor-pointer"]
+    //         // }),
+    //         createElement("div", {
+    //             class: ["flex-1", "bg-gray-700", "rounded-full", "px-4", "py-2"]
+    //         }, [
+    //             createElement("input", {
+    //                 class: ["w-full", "bg-transparent", "text-white", "placeholder-gray-400", "outline-none"],
+    //                 placeholder: "Type a reply...",
+    //                 type: "text"
+    //             })
+    //         ]),
+    //         createElement("i", {
+    //             class: ["fa-solid", "fa-paper-plane", "text-white", "text-xl", "cursor-pointer"]
+    //         })
+    //     ])
+    // ])
+]);

@@ -1,7 +1,7 @@
 import { apiService } from '../services/api.js';
 import { getCurrentUser, setCurrentUser } from '../utils/auth.js';
 import { displayUserConversations } from './chats.js';
-import {showElement} from '../handlers/eventHandlers.js';
+import {showElement} from '../ui/uiManagers.js';
 
 // Fonction de gestion de la connexion
 export const handleLogin = async (event) => {
@@ -139,7 +139,7 @@ export function showLoginPage() {
   }
 }
 
-export function logout() {
+export async function logout() {
   const DEFAULT_USER = getCurrentUser();
   const previousUser = { ...DEFAULT_USER };
   
@@ -151,6 +151,12 @@ export function logout() {
   
   // Supprimer la session de localStorage
   clearUserSession();
+
+  await apiService.updateUser(previousUser.id, {
+    ...previousUser,
+    isOnline: false,
+    lastSeen: new Date().toISOString()
+  });
   
   // console.log(`Utilisateur ${previousUser.name} déconnecté`);
   

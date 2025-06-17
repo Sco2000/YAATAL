@@ -54,11 +54,29 @@ export const createUser = async (userData) => {
 export const addContactToCurrentUser = async (contactData) => {
   const currentUser = getCurrentUser();
   const currentUserData = await fetchUserById(currentUser.id);
-  const  currentUserContacts = [...currentUserData.contacts, contactData.id];
+  const  currentUserContacts = [...currentUserData.contacts, ...contactData];
   return await fetchAPI(`/users/${currentUser.id}`, {
     method: "PATCH",
     body: JSON.stringify({contacts: currentUserContacts}),
   });
+};
+
+export const refreshCurrentUser = async () => {
+  const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (!storedUser || !storedUser.id) return;
+
+  try {
+    const response = await fetch(`http://localhost:3002/users/${storedUser.id}`);
+    if (!response.ok) throw new Error('Erreur de récupération des données');
+
+    const updatedUser = await response.json();
+
+    // Mise à jour dans le localStorage
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du currentUser :', error);
+  }
 };
 
 // export const createContact = async (userData) => {

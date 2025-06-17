@@ -1,16 +1,16 @@
 import './style.css'
 import "./index.css"
-import { leftBox, centerBox, rightBox, loginPage } from "./ui/components.js"
+import { leftBox, centerBox, rightBox, loginPage, theStatus } from "./ui/components.js"
 import { createElement } from "./components.js"
 import { showLoginPage, hideLoginPage, showMainApp } from './pages/login.js'
 import { getCurrentUser } from './utils/auth.js';  
 import {renderGroupedContacts} from "./pages/contacts.js"
 import { displayUserConversations } from './pages/chats.js'
 import { getContactStatus, separateStatus } from './pages/status.js'
-import { hideAllElements } from './handlers/eventHandlers.js';
-import { showElement } from './handlers/eventHandlers.js';
+import { showElement, hideAllElements } from './ui/uiManagers.js';
 import { handleSendMessage } from './handlers/eventHandlers.js'
 import { startPolling } from './polling.js'
+import { fetchConversations } from './api/api.js'
 
 const app = createElement(
     "div", 
@@ -22,7 +22,8 @@ const app = createElement(
     [
       leftBox,
       centerBox,
-      rightBox
+      rightBox,
+      theStatus
     ]
 );
 
@@ -57,3 +58,7 @@ startPolling();
 
 // const user = getCurrentUser();
 // console.log( Number(user.id )+ 1);
+// const conversations = await fetchConversations();
+// console.log(Math.max(...conversations.map(conv => conv.id)) + 1);
+// console.log(Math.max(...conversations.map(conv => conv.id) + 1));
+// Supprimer ces lignes car le status-view sera géré dans components.js 

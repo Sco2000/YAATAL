@@ -1,26 +1,22 @@
 import { createElement } from '../components.js';
 import { getCurrentUser } from '../utils/auth.js';
-import { fetchContacts, fetchUsers } from '../api/api.js';
+import { fetchContacts, fetchUsers, refreshCurrentUser } from '../api/api.js';
+import { selectContact } from "../handlers/eventHandlers.js"
 
 export async function groupContactsByLetter() {
+    refreshCurrentUser();
     const currentUser = getCurrentUser();
     if(!currentUser) return
     try{
-        const currentUserContactsId = currentUser.contacts;
+      
+        const currentUserContacts = currentUser.contacts;
         const contacts = await fetchContacts();
-
-        const currentUserContacts = contacts.filter(contact => currentUserContactsId.includes(contact.id));
-        // Trier les contacts par nom
-        // console.log(currentUserContacts);
-        
-        // console.log(contacts);
         
       const sorted = [...currentUserContacts].sort((a, b) =>
         a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' })
       );
-    
-      // Grouper par première lettre
       const grouped = {};
+
       sorted.forEach(contact => {
         const letter = contact.name[0].toUpperCase();
         if (!grouped[letter]) {
@@ -28,7 +24,6 @@ export async function groupContactsByLetter() {
         }
         grouped[letter].push(contact);
       });
-      // console.log(grouped);
       
       return grouped;
     }
@@ -39,26 +34,20 @@ export async function groupContactsByLetter() {
 
 export async function renderGroupedContacts() {
   const container = document.getElementById("contacts-list");
-  container.innerHTML = ''; // Vider le conteneur
+  container.innerHTML = ''; 
   const groupedContacts = await groupContactsByLetter();
   const users = await fetchUsers();
-  // console.log(users);
-  
-  // console.log(groupedContacts);
   
   for (const letter in groupedContacts) {
-    // Titre de section (ex: "A")
     container.appendChild(createElement("div", {
       class: ["text-teal-400", "text-lg", "font-bold", "py-2",]
     }, letter));
 
-    // Contacts sous cette lettre
     groupedContacts[letter].forEach(contact => {
     const userContact = users.find(user => user.id === contact.id);
-    // console.log(userContact);
       
       const contactElement = createElement("div", {
-        
+        onclick: () => { selectContact(contact) }
       }, 
       [
         createElement("hr", {class: ["w-[85%]",  "ml-auto", "border-gray-600"]}, ),
@@ -80,5 +69,4 @@ export async function renderGroupedContacts() {
       container.appendChild(contactElement);
     });
   }
-  // console.log(container);
 }

@@ -1,7 +1,7 @@
 import { getCurrentUser } from "../utils/auth";
 import { isValidPhoneNumber } from "./login.js"
-import { fetchUsers, addContactToCurrentUser, fetchContacts, fetchUserById } from "../api/api.js";
-import { showElement } from "../handlers/eventHandlers.js";
+import { fetchUsers, addContactToCurrentUser, fetchContacts, refreshCurrentUser } from "../api/api.js";
+import { showElement } from "../ui/uiManagers.js";
 
 export const addContact = async (event) => {
     event.preventDefault();
@@ -26,11 +26,12 @@ export const addContact = async (event) => {
     }
 
      const contacts = await fetchContacts();
-     const userContacts = contacts.filter(contact => currentUser.contacts.includes(contact.id));
-     const userContactsPhone = userContacts.map(contact => contact.phone);
+     const userContactsPhone = (contacts.filter(contact => currentUser.contacts.includes(contact.id))).map(contact => contact.phone);
+    //  const userContactsPhone = userContacts.map(contact => contact.phone);
      console.log(currentUser.contacts);
-     console.log(userContacts);
+    //  console.log(userContacts);
      console.log(userContactsPhone);
+    
      
 
      if(userContactsPhone.includes(phone)){
@@ -55,8 +56,9 @@ export const addContact = async (event) => {
     // createContact(contact);
     const contact = await fetchContacts();
     const userContact = contact.filter(contact => contact.phone === phone);
-    addContactToCurrentUser(userContact[0])
-
+    userContact[0].name = name;
+    addContactToCurrentUser(userContact);
+    refreshCurrentUser();
     showElement("list-contacts");
 }
 

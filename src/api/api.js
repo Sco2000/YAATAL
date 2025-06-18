@@ -2,13 +2,13 @@
 
 import { getCurrentUser } from "../utils/auth";
 
-// const BASE_URL = "https://json-server-yaatal.onrender.com";
-const LOCAL_HOST = "http://localhost:3002";
+const BASE_URL = "https://json-server-yaatal.onrender.com";
+// const LOCAL_HOST = "http://localhost:3002";
 
 // Generic fetch function with error handling
 const fetchAPI = async (url, options = {}) => {
   try {
-    const response = await fetch(`${LOCAL_HOST}${url}`, {
+    const response = await fetch(`${BASE_URL}${url}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
